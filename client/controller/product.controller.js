@@ -1,5 +1,6 @@
 const grpc = require('@grpc/grpc-js')
 const protoLoader = require('@grpc/proto-loader')
+const { json } = require('express')
 const path = require('path')
 
 const productProtoPath = path.join(
@@ -26,7 +27,14 @@ function listProduct (req, res, next) {
   })
 }
 function getProduct (req, res, next) {}
-function createProduct (req, res, next) {}
+
+function createProduct (req, res, next) {
+  const { title, price } = req.query
+  productClient.createProduct({ title, price }, (err, data) => {
+    if (err) return json(err)
+    return res.json(data)
+  })
+}
 function updateProduct (req, res, next) {}
 function deleteProduct (req, res, next) {}
 
